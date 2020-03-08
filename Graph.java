@@ -6,41 +6,19 @@ class Graph{
 
     public void addEdge(int u,int v,boolean bidir)
     {  
-    	if(adjList.get(u)!=null)
+    	if(adjList.get(u)==null)
     	{
-    		if(bidir)
-    		{
-    			adjList.get(u).add(v);
-    			if(adjList.get(v)!=null){
-    				adjList.get(v).add(u);
-    			}
-    			else{
-    				ArrayList<Integer>arr=new ArrayList<>();
-    				arr.add(u);
-    				adjList.put(v,new ArrayList<>(arr));
-    			}
-    		}
-    		else
-    		{
-    			adjList.get(u).add(v);
-    		}
-    		
+    		adjList.put(u,new ArrayList<Integer>());
     	}
-    	else{
-    		ArrayList<Integer>arr=new ArrayList<>();
-
-    		arr.add(v);
-    		adjList.put(u,new ArrayList<>(arr));
-    		arr.clear();
-    		if(bidir){	
-    			arr.add(u);
-    			if(adjList.get(v)==null){
-    			adjList.put(v,new ArrayList<>(arr));
-    			arr.clear();}
-    			else{
-    				adjList.get(v).add(u);
-    			}
-    		}
+    	if(adjList.get(v)==null)
+    	{
+    		adjList.put(v,new ArrayList<Integer>());
+    	}
+    	
+    	adjList.get(u).add(v);
+    	if(bidir)
+    	{
+    		adjList.get(v).add(u);
     	}
     }
 
@@ -117,6 +95,30 @@ class Graph{
     	}
 
     }
+
+    int connectedComponents(){
+
+    	HashMap<Integer,Boolean>visited=new HashMap<>();
+    	for(Map.Entry mp:adjList.entrySet())
+    	{
+    		int k=(int)mp.getKey();
+    		visited.put(k,false);
+    	}
+
+    	int component=0;
+
+    	for(Map.Entry node:adjList.entrySet())
+    	{
+    		int nodex=(int)node.getKey();
+    		if(visited.get(nodex)==false)
+    		{
+    			dfshelper(nodex,visited);
+    			component++;
+    		}
+    	}
+
+    	return component;
+    }
 }
 
 class run{
@@ -128,14 +130,23 @@ class run{
 		gg.addEdge(1,3,true);
 		gg.addEdge(2,4,true);
 		gg.addEdge(2,5,true);
+		gg.addEdge(15,20,true);
+		gg.addEdge(26,25,true);
+
 		//gg.addEdge(3,4,true);
 
 		gg.display();
 
 		System.out.println("*********DFS*********");
-		gg.dfs(1);
+		gg.dfs(15);
+
 		System.out.println();
 		System.out.println("*********BFS**********");
-		gg.bfs(1);
+		gg.bfs(15);
+
+		System.out.println();
+		System.out.println("*********connectedComponents**********");
+		int x=gg.connectedComponents();
+		System.out.println(x);
 	}
 }
