@@ -166,6 +166,45 @@ class Graph{
 			}
 		}
     }
+
+
+    void levelOfNodes(int src)
+    {
+    	HashMap<Integer,Integer>level=new HashMap<>();
+
+    	HashMap<Integer,Boolean>visited=new HashMap<>();
+    	for(Map.Entry mp:adjList.entrySet())
+    	{
+    		int k=(int)mp.getKey();
+    		visited.put(k,false);
+    		level.put(k,0);
+    	}
+    	Queue<Integer>q=new LinkedList<>();
+    	q.add(src);
+    	visited.put(src,true);
+    	
+    	while(!q.isEmpty())
+    	{
+    		int node=q.peek();
+    		q.remove();
+
+    		for(int neigh:adjList.get(node))
+    		{
+    			if(visited.get(neigh)==false)
+    			{
+    				level.put(neigh,level.get(node)+1);
+    				q.add(neigh);
+    				visited.put(neigh,true);
+    			}
+    		}
+    	}
+
+    	for(Map.Entry mp:adjList.entrySet())
+    	{
+    		int k=(int)mp.getKey();
+    		System.out.println(k+"->"+level.get(k));
+    	}
+    }
 }
 
 class run{
@@ -209,6 +248,10 @@ class run{
 		System.out.println();
 		System.out.println("*********bfs topologicalSort**********");
 		gg.topologicalSort();
+		
+		System.out.println();
+		System.out.println("*********levelOfNodes**********");
+		gg.levelOfNodes(1);
 		
 
 	}
